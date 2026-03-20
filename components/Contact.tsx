@@ -2,6 +2,7 @@
 import React, { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useMobileReveal } from "../hooks/useMobileMotion";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -25,8 +26,12 @@ export default function Contact() {
     },
   ]
 
+  useMobileReveal(containerRef);
+
   useEffect(() => {
-    // 1. Marquee Animation
+    let mm = gsap.matchMedia();
+
+    // 1. Marquee Animation (Runs everywhere)
     gsap.to(marqueeRef.current, {
       xPercent: -50,
       ease: "none",
@@ -34,36 +39,42 @@ export default function Contact() {
       repeat: -1,
     });
 
-    // 2. Reveal Animation for the main heading
-    gsap.from(".contact-reveal", {
-      y: 200,
-      skewY: 10,
-      opacity: 0,
-      duration: 1.5,
-      ease: "power4.out",
-      scrollTrigger: {
-        trigger: containerRef.current,
-        start: "top 60%",
-      },
+    mm.add("(min-width: 1025px)", () => {
+      // 2. Reveal Animation for the main heading
+      gsap.from(".contact-reveal", {
+        y: 200,
+        skewY: 10,
+        opacity: 0,
+        duration: 1.5,
+        ease: "power4.out",
+        scrollTrigger: {
+          trigger: containerRef.current,
+          start: "top 60%",
+        },
+      });
+
+      // 3. Magnetic Effect for Social Links
+      const links = document.querySelectorAll(".magnetic-link");
+      links.forEach((link) => {
+        link.addEventListener("mousemove", (e: any) => {
+          const rect = link.getBoundingClientRect();
+          const x = e.clientX - rect.left - rect.width / 2;
+          const y = e.clientY - rect.top - rect.height / 2;
+          gsap.to(link, { x: x * 0.3, y: y * 0.3, duration: 0.5, ease: "power2.out" });
+        });
+        link.addEventListener("mouseleave", () => {
+          gsap.to(link, { x: 0, y: 0, duration: 0.5, ease: "elastic.out(1, 0.3)" });
+        });
+      });
     });
 
-    // 3. Magnetic Effect for Social Links
-    const links = document.querySelectorAll(".magnetic-link");
-    links.forEach((link) => {
-      link.addEventListener("mousemove", (e) => {
-        const rect = link.getBoundingClientRect();
-        const x = e.clientX - rect.left - rect.width / 2;
-        const y = e.clientY - rect.top - rect.height / 2;
-        gsap.to(link, { x: x * 0.3, y: y * 0.3, duration: 0.5, ease: "power2.out" });
-      });
-      link.addEventListener("mouseleave", () => {
-        gsap.to(link, { x: 0, y: 0, duration: 0.5, ease: "elastic.out(1, 0.3)" });
-      });
-    });
+    return () => {
+      mm.revert();
+    };
   }, []);
 
   return (
-    <section 
+    <section
       ref={containerRef}
       className="relative w-full min-h-screen bg-black text-white flex flex-col justify-between overflow-hidden pt-20"
     >
@@ -76,21 +87,21 @@ export default function Contact() {
       </div>
 
       {/* 2. Main Content */}
-      <div className="relative z-10 px-6 md:px-20 mt-40">
+      <div className="relative z-10 px-6 md:px-20 max-lg:px-8 max-sm:px-4 mt-40 max-lg:mt-24">
         <div className="overflow-hidden">
-          <h2 className="contact-reveal text-[10vw] md:text-[8vw] font-bold leading-[0.9] tracking-tighter uppercase">
+          <h2 className="contact-reveal text-[10vw] md:text-[8vw] max-lg:text-[12vw] font-bold leading-[0.9] tracking-tighter uppercase break-words mobile-reveal-heading mobile-motion-element">
             Have an idea? <br />
             <span className="text-neutral-500">Let's talk.</span>
           </h2>
         </div>
 
-        <div className="mt-20 group inline-block">
-          <a 
+        <div className="mt-20 group inline-block max-w-full">
+          <a
             href="https://mail.google.com/mail/?view=cm&fs=1&to=riyasisodiya2005@gmail.com"
-            target="_blank" 
+            target="_blank"
             rel="noopener noreferrer"
             ref={emailRef}
-            className="text-3xl md:text-6xl font-light tracking-tight hover:text-neutral-400 transition-colors duration-500 flex items-center gap-6"
+            className="text-3xl md:text-6xl max-lg:text-4xl max-sm:text-[6vw] font-light tracking-tight hover:text-neutral-400 transition-colors duration-500 flex items-center max-sm:items-start gap-6 max-sm:gap-2 break-all mobile-reveal-text mobile-motion-element active:scale-95 transition-transform"
           >
             riyasisodiya2005@gmail.com
             <div className="w-12 h-12 md:w-20 md:h-20 rounded-full border border-white/20 flex items-center justify-center group-hover:bg-white group-hover:text-black transition-all duration-700">
@@ -104,15 +115,15 @@ export default function Contact() {
       </div>
 
       {/* 3. Footer Grid */}
-      <div className="relative z-10 px-6 md:px-20 pb-10 mt-20 flex flex-col md:flex-row justify-between items-end border-t border-white/10 pt-10">
-        <div className="flex flex-col gap-4 mb-10 md:mb-0">
+      <div className="relative z-10 px-6 md:px-20 max-lg:px-8 max-sm:px-4 pb-10 mt-20 flex flex-col md:flex-row max-lg:flex-col justify-between items-end max-lg:items-start border-t border-white/10 pt-10">
+        <div className="flex flex-col gap-4 mb-10 md:mb-0 mobile-reveal-text mobile-motion-element">
           <span className="text-xs font-mono uppercase tracking-[0.3em] text-neutral-500">Socials</span>
           <div className="flex gap-8">
             {socialLinks.map((social) => (
-              <a 
-                key={social.label} 
-                href={social.href} 
-                className="magnetic-link text-sm uppercase tracking-widest hover:text-neutral-400 transition-colors"
+              <a
+                key={social.label}
+                href={social.href}
+                className="magnetic-link text-sm uppercase tracking-widest hover:text-neutral-400 transition-colors active:text-neutral-500"
               >
                 {social.label}
               </a>
@@ -120,7 +131,7 @@ export default function Contact() {
           </div>
         </div>
 
-        <div className="flex flex-col items-end gap-2 text-right">
+        <div className="flex flex-col items-end max-lg:items-start gap-2 text-right max-lg:text-left mobile-reveal-text mobile-motion-element">
           <p className="text-[10px] text-neutral-600 mt-4 tracking-widest uppercase">
             © 2026 Developed by Riya Sisodiya
           </p>

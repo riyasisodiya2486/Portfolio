@@ -5,6 +5,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Lenis from "@studio-freight/lenis";
 // Added the Import
 import ScrollVelocity from './ui/ScrollVelocity';
+import { useMobileReveal } from "../hooks/useMobileMotion";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -52,67 +53,80 @@ export default function SkillsSection() {
   // Velocity constant for the ScrollVelocity component
   const velocity = 5;
 
+  useMobileReveal(containerRef);
+
   useEffect(() => {
-    const lenis = new Lenis({
-      duration: 1.2,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-    });
-
-    function raf(time: number) {
-      lenis.raf(time);
-      requestAnimationFrame(raf);
-    }
-    requestAnimationFrame(raf);
-
     const cards = gsap.utils.toArray<HTMLElement>(".skill-card");
 
-    cards.forEach((card, i) => {
-      const speed = skillsData[i].speed;
-
-      gsap.to(card, {
-        y: -500 * speed,
-        ease: "none",
-        scrollTrigger: {
-          trigger: card,
-          start: "top bottom",
-          end: "bottom top",
-          scrub: true,
-        },
+    let mm = gsap.matchMedia();
+    mm.add("(min-width: 1025px)", () => {
+      const lenis = new Lenis({
+        duration: 1.2,
+        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       });
 
-      ScrollTrigger.create({
-        onUpdate: (self) => {
-          const v = self.getVelocity() / 1500;
-          gsap.to(card, {
-            skewY: v,
-            scale: 1 - Math.abs(v) * 0.05,
-            duration: 0.5,
-            ease: "power3.out",
-          });
-        },
+      let rafId: number;
+      function raf(time: number) {
+        lenis.raf(time);
+        rafId = requestAnimationFrame(raf);
+      }
+      rafId = requestAnimationFrame(raf);
+
+      cards.forEach((card, i) => {
+        const speed = skillsData[i].speed;
+
+        gsap.to(card, {
+          y: -500 * speed,
+          ease: "none",
+          scrollTrigger: {
+            trigger: card,
+            start: "top bottom",
+            end: "bottom top",
+            scrub: true,
+          },
+        });
+
+        ScrollTrigger.create({
+          onUpdate: (self) => {
+            const v = self.getVelocity() / 1500;
+            gsap.to(card, {
+              skewY: v,
+              scale: 1 - Math.abs(v) * 0.05,
+              duration: 0.5,
+              ease: "power3.out",
+            });
+          },
+        });
       });
+
+      return () => {
+        lenis.destroy();
+        cancelAnimationFrame(rafId);
+      };
     });
 
-    return () => lenis.destroy();
+    return () => {
+      mm.revert();
+    };
   }, []);
 
   return (
     <section
       ref={containerRef}
-      className="relative w-full min-h-[310vh] bg-gradient-to-b from-white via-transparent to-black "
+      className="relative w-full min-h-[310vh] max-lg:min-h-screen bg-gradient-to-b from-white via-transparent to-black max-lg:pb-24 max-lg:overflow-visible overflow-hidden"
     >
       {/* ScrollVelocity added at the top of the section */}
       <div className="pt-10 pb-20 text-black/85">
         <ScrollVelocity
           texts={['Design × Engineering', '○ Scroll to Explore']}
-          velocity={velocity} 
+          velocity={velocity}
           className="custom-scroll-text font-black"
         />
       </div>
 
       {/* Sticky Header */}
-      <div className="sticky top-0 h-screen flex flex-col justify-center pointer-events-none z-0">
-        <h2 className="text-[12vw] font-black uppercase leading-[0.8] tracking-tighter opacity-10 px-5 select-none">
+      <div className="sticky max-lg:relative top-0 h-screen max-lg:h-auto max-lg:mt-10 max-lg:mb-20 flex flex-col justify-center pointer-events-none z-0">
+        <h2 className="text-[12vw] max-lg:text-[18vw] font-black uppercase leading-[0.8] tracking-tighter opacity-10 px-5 select-none mobile-reveal-heading mobile-motion-element">
           Expertise
           <br />
           Capabilities
@@ -120,17 +134,17 @@ export default function SkillsSection() {
       </div>
 
       {/* Cards */}
-      <div className="absolute top-0 left-0 w-full h-full py-[20vh]">
+      <div className="absolute max-lg:relative top-0 left-0 w-full h-full max-lg:h-auto py-[20vh] max-lg:py-0 max-lg:px-8 max-sm:px-4 max-lg:flex max-lg:flex-col max-lg:gap-12">
         {skillsData.map((skill, i) => (
           <div
             key={i}
-            className={`skill-card group absolute ${skill.className}
+            className={`skill-card group absolute max-lg:relative ${skill.className} max-lg:w-full max-lg:h-auto max-lg:min-h-[400px] max-sm:min-h-[350px] max-lg:top-auto max-lg:left-auto
             backdrop-blur-2xl bg-white/40 border border-white/50
             rounded-[2rem] p-10 flex flex-col justify-between
             shadow-[0_30px_80px_rgba(0,0,0,0.08)]
             transition-all duration-700
             hover:bg-white/60 hover:border-white
-            z-[${i + 1}]`}
+            z-[${i + 1}] mobile-reveal-card mobile-motion-element active:scale-[0.98]`}
           >
             {/* Animated Skill Symbol */}
             <div

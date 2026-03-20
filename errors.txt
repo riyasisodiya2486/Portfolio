@@ -1,0 +1,6 @@
+components/LenisProvider.tsx(25,28): error TS2345: Argument of type 'number | undefined' is not assignable to parameter of type 'string | number | HTMLElement'.
+  Type 'undefined' is not assignable to type 'string | number | HTMLElement'.
+components/Navbar.tsx(50,11): error TS2322: Type 'string | null' is not assignable to type 'string | number | Function | Element | Vars | undefined'.
+  Type 'null' is not assignable to type 'string | number | Function | Element | Vars | undefined'.
+components/Navbar.tsx(119,11): error TS2322: Type 'string | null' is not assignable to type 'string | number | Function | Element | Vars | undefined'.
+  Type 'null' is not assignable to type 'string | number | Function | Element | Vars | undefined'.

@@ -5,6 +5,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Lenis from "@studio-freight/lenis";
 import { EvervaultCardDemo } from "./EvervaultCardDemo";
+import { useMobileReveal } from "../hooks/useMobileMotion";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -13,79 +14,88 @@ export default function AboutMe() {
   const headlineBgRef = useRef<HTMLDivElement>(null);
   const cardRef = useRef<HTMLDivElement>(null);
 
+  useMobileReveal(sectionRef);
+
   useEffect(() => {
-    // ------------------- Lenis Smooth Scroll -------------------
-    const lenis = new Lenis({
-      duration: 1.2,
-      easing: (t) => t,
-      smooth: true,
-    });
-
-    function raf(time: number) {
-      lenis.raf(time);
-      requestAnimationFrame(raf);
-    }
-    requestAnimationFrame(raf);
-
     // ------------------- GSAP Animations -------------------
-    const ctx = gsap.context(() => {
-      // Background Typography scroll animation
-      gsap.fromTo(
-        headlineBgRef.current,
-        { y: 100 },
-        {
-          y: -60,
-          ease: "none",
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: "top bottom",
-            end: "bottom top",
-            scrub: true,
-          },
-        }
-      );
-
-      // Card scroll animation
-      gsap.from(cardRef.current, {
-        y: 60,
-        scale: 0.95,
-        opacity: 0,
-        ease: "power3.out",
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top 70%",
-          scrub: true,
-        },
+    let mm = gsap.matchMedia();
+    mm.add("(min-width: 1025px)", () => {
+      // ------------------- Lenis Smooth Scroll (Desktop Only) -------------------
+      const lenis = new Lenis({
+        duration: 1.2,
+        easing: (t) => t,
       });
 
-      // Text reveal stagger animation
-      gsap.from(
-        sectionRef.current!.querySelectorAll("h2, p, button"),
-        {
-          y: 50,
+      let rafId: number;
+      function raf(time: number) {
+        lenis.raf(time);
+        rafId = requestAnimationFrame(raf);
+      }
+      rafId = requestAnimationFrame(raf);
+
+      const ctx = gsap.context(() => {
+        // Background Typography scroll animation
+        gsap.fromTo(
+          headlineBgRef.current,
+          { y: 100 },
+          {
+            y: -60,
+            ease: "none",
+            scrollTrigger: {
+              trigger: sectionRef.current,
+              start: "top bottom",
+              end: "bottom top",
+              scrub: true,
+            },
+          }
+        );
+
+        // Card scroll animation
+        gsap.from(cardRef.current, {
+          y: 60,
+          scale: 0.95,
           opacity: 0,
-          stagger: 0.15,
-          ease: "power4.out",
+          ease: "power3.out",
           scrollTrigger: {
             trigger: sectionRef.current,
-            start: "top 75%",
-            end: "bottom 40%",
+            start: "top 70%",
             scrub: true,
           },
-        }
-      );
-    }, sectionRef);
+        });
+
+        // Text reveal stagger animation
+        gsap.from(
+          sectionRef.current!.querySelectorAll("h2, p, button"),
+          {
+            y: 50,
+            opacity: 0,
+            stagger: 0.15,
+            ease: "power4.out",
+            scrollTrigger: {
+              trigger: sectionRef.current,
+              start: "top 75%",
+              end: "bottom 40%",
+              scrub: true,
+            },
+          }
+        );
+      }, sectionRef);
+      return () => {
+        ctx.revert();
+        lenis.destroy();
+        cancelAnimationFrame(rafId);
+      };
+    });
 
     return () => {
-      ctx.revert();
-      lenis.destroy();
+      mm.revert();
     };
   }, []);
 
   return (
     <section
       ref={sectionRef}
-      className="relative min-h-[150vh] bg-black text-white overflow-hidden"
+      className="relative min-h-[150vh] max-lg:min-h-screen bg-black text-white max-lg:overflow-visible overflow-hidden max-lg:pb-24"
     >
       {/* Ambient light */}
       <div className="absolute inset-0 bg-gradient-to-b from-black via-transparent to-white/100" />
@@ -93,9 +103,9 @@ export default function AboutMe() {
       {/* Background Identity Typography */}
       <div
         ref={headlineBgRef}
-        className="absolute top-[30vh] left-0 w-full px-10 md:px-24 pointer-events-none"
+        className="absolute top-[30vh] max-lg:top-[12vh] left-0 w-full px-10 md:px-24 max-lg:px-8 max-sm:px-4 pointer-events-none"
       >
-        <h1 className="text-[clamp(5rem,14vw,14rem)] leading-[0.95] font-semibold tracking-tight opacity-[0.05]">
+        <h1 className="text-[clamp(5rem,14vw,14rem)] max-lg:text-[clamp(3.5rem,12vw,5rem)] leading-[0.95] font-semibold tracking-tight opacity-[0.05]">
           DESIGN
           <br />
           × ENGINEER
@@ -103,14 +113,14 @@ export default function AboutMe() {
       </div>
 
       {/* Main Content */}
-      <div className="relative z-10 max-w-[1400px] mx-auto px-10 md:px-24 pt-[55vh] grid grid-cols-1 lg:grid-cols-12 gap-16 items-start">
+      <div className="relative z-10 max-w-[1400px] mx-auto px-10 md:px-24 max-lg:px-8 max-sm:px-4 pt-[55vh] max-lg:pt-[35vh] max-sm:pt-[25vh] grid grid-cols-1 lg:grid-cols-12 max-lg:flex max-lg:flex-col gap-16 items-start">
         {/* Text */}
         <div className="lg:col-span-5 space-y-8">
-          <p className="uppercase tracking-[0.4em] text-xs text-white/60">
+          <p className="uppercase tracking-[0.4em] max-lg:tracking-[0.15em] text-xs text-white/60 mobile-reveal-text mobile-motion-element">
             About
           </p>
 
-          <h2 className="text-[clamp(2.6rem,4.8vw,4.2rem)] leading-[1.05] font-light">
+          <h2 className="text-[clamp(2.6rem,4.8vw,4.2rem)] leading-[1.05] font-light mobile-reveal-heading mobile-motion-element">
             Where design thinking
             <br />
             meets engineering
@@ -118,13 +128,13 @@ export default function AboutMe() {
             precision.
           </h2>
 
-          <p className="text-lg text-white/70 leading-relaxed max-w-[420px]">
+          <p className="text-lg text-white/70 leading-relaxed max-w-[420px] mobile-reveal-text mobile-motion-element">
             I build immersive digital experiences focused on interaction,
             performance, and clarity — shaping interfaces that feel intentional,
             fluid, and alive.
           </p>
 
-          <button className="relative mt-6 group overflow-hidden border border-white/40 rounded-full px-9 py-4 uppercase tracking-[0.3em] text-xs">
+          <button className="relative mt-6 group overflow-hidden border border-white/40 rounded-full px-9 py-4 uppercase tracking-[0.3em] text-xs mobile-reveal-text mobile-motion-element active:scale-95 transition-transform duration-300">
             <span className="relative z-10 group-hover:text-black transition-colors duration-300">
               Let’s work
             </span>
@@ -133,10 +143,10 @@ export default function AboutMe() {
         </div>
 
         {/* Visual Card */}
-        <div className="lg:col-span-7 relative flex justify-end">
+        <div className="lg:col-span-7 relative flex justify-end max-lg:justify-center max-lg:w-full">
           <div
             ref={cardRef}
-            className="relative w-[420px] h-[520px] rounded-[26px] border border-white/10 bg-white/[0.04] backdrop-blur-xl shadow-[0_60px_120px_rgba(0,0,0,0.65)]"
+            className="relative w-[420px] max-lg:w-full h-[520px] max-lg:h-[380px] rounded-[26px] border border-white/10 bg-white/[0.04] backdrop-blur-xl shadow-[0_60px_120px_rgba(0,0,0,0.65)] mobile-reveal-card mobile-motion-element active:scale-[0.98] transition-transform duration-500 ease-out"
           >
             <EvervaultCardDemo />
           </div>

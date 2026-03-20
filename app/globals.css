@@ -175,8 +175,18 @@
   * {
     @apply border-border outline-ring/50;
   }
-  body {
+  html, body {
     @apply bg-background text-foreground;
+    max-width: 100vw;
+    overflow-x: hidden;
+  }
+  img, video {
+    max-width: 100%;
+    height: auto;
+  }
+  h1, h2, h3, h4, h5, h6, p, a, span {
+    overflow-wrap: break-word;
+    word-break: normal;
   }
 }
 
@@ -229,4 +239,11 @@
 .vertical-text {
   writing-mode: vertical-rl;
   text-orientation: mixed;
+}
+
+@layer utilities {
+  .mobile-motion-element {
+    will-change: transform, opacity;
+    transform: translateZ(0);
+  }
 }

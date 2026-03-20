@@ -13,17 +13,23 @@ export default function LenisProvider({
   children: React.ReactNode
 }) {
   useEffect(() => {
+    // ABORT LENIS ENTIRELY ON MOBILE TO GUARANTEE NATIVE 60FPS SCROLLING 
+    if (window.innerWidth <= 1024) {
+      return;
+    }
+
     const lenis = new Lenis({
-      lerp: 0.08,
+      lerp: 0.1, // ~0.08 - 0.12
       smoothWheel: true,
     })
 
     // 🔥 GSAP <-> Lenis SYNC
     ScrollTrigger.scrollerProxy(document.body, {
       scrollTop(value) {
-        return arguments.length
-          ? lenis.scrollTo(value)
-          : lenis.scroll
+        if (arguments.length && typeof value === 'number') {
+          lenis.scrollTo(value, { immediate: true })
+        }
+        return lenis.scroll
       },
       getBoundingClientRect() {
         return {
@@ -38,15 +44,17 @@ export default function LenisProvider({
     lenis.on('scroll', ScrollTrigger.update)
     ScrollTrigger.defaults({ scroller: document.body })
 
+    let rafId: number;
     const raf = (time: number) => {
       lenis.raf(time)
-      requestAnimationFrame(raf)
+      rafId = requestAnimationFrame(raf)
     }
 
-    requestAnimationFrame(raf)
+    rafId = requestAnimationFrame(raf)
 
     return () => {
       lenis.destroy()
+      cancelAnimationFrame(rafId);
       ScrollTrigger.killAll()
     }
   }, [])
