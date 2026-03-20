@@ -84,7 +84,7 @@ public/         # assets
 
 ## 🌐 Live
 
-_Add your deployed link here_
+https://portfolio-lovat-eight-52.vercel.app/
 
 ---
 
