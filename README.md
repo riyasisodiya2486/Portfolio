@@ -4,18 +4,6 @@ A personal portfolio focused on **motion, clarity, and speed** — designed to f
 
 ---
 
-## 🧠 Philosophy
-
-Most portfolios either:
-- look good but feel heavy  
-- or perform well but feel basic  
-
-This project is built to balance both:
-- **Desktop → rich, immersive interactions**
-- **Mobile → fast, fluid, distraction-free**
-
----
-
 ## 🚀 What’s inside
 
 - Responsive layout (no layout shifts, no overflow issues)
