@@ -1,36 +1,122 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# ⚡ Portfolio — Built for Performance & Motion
 
-## Getting Started
+A personal portfolio focused on **motion, clarity, and speed** — designed to feel smooth, intentional, and responsive across all devices.
 
-First, run the development server:
+---
+
+## 🧠 Philosophy
+
+Most portfolios either:
+- look good but feel heavy  
+- or perform well but feel basic  
+
+This project is built to balance both:
+- **Desktop → rich, immersive interactions**
+- **Mobile → fast, fluid, distraction-free**
+
+---
+
+## 🚀 What’s inside
+
+- Responsive layout (no layout shifts, no overflow issues)
+- Device-aware animations (different logic for desktop & mobile)
+- Smooth scrolling experience
+- Section-based motion system (not random animations)
+- Clean component structure
+
+---
+
+## 🛠 Stack
+
+- Next.js
+- React
+- Tailwind CSS
+- GSAP
+- Lenis
+
+---
+
+## ⚙️ Setup
 
 ```bash
+git clone https://github.com/riyasisodiya2486/Portfolio.git
+cd Portfolio
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 🎬 Motion System (important)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+This project does **not** use the same animation strategy everywhere.
 
-## Learn More
+### Desktop
+- Scroll-driven animations
+- GSAP timelines
+- Advanced interactions (horizontal scroll, parallax)
 
-To learn more about Next.js, take a look at the following resources:
+### Mobile / Tablet
+- No heavy scroll manipulation
+- Lightweight reveal animations
+- Performance-first approach
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+> The goal isn’t “more animation” — it’s **better control over motion**
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
+## 📱 Responsiveness Approach
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Instead of rewriting layouts:
+- Desktop design remains untouched  
+- Layout shifts to vertical flow  
+- Typography scales using fluid units  
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+
+## ⚡ Performance Decisions
+
+- Avoided heavy animation stacking on mobile  
+- Reduced layout thrashing  
+- Limited animations per frame  
+- Used transform-based animations only  
+
+---
+
+## 📂 Structure
+
+```bash
+app/            # routes & layout
+components/     # UI sections
+hooks/          # animation logic
+public/         # assets
+```
+
+---
+
+## 🌐 Live
+
+_Add your deployed link here_
+
+---
+
+## 📸 Preview
+
+_Add 2–3 clean screenshots (Hero, Projects, Mobile view)_
+
+---
+
+## 📌 Notes
+
+- Desktop and mobile experiences are intentionally different  
+- Some animations are disabled on smaller devices to maintain smoothness  
+- Built with focus on real-world performance, not just visuals  
+
+---
+
+## 🧩 What I’d improve next
+
+- Add page transitions  
+- Improve micro-interactions  
+- Reduce initial load time further  
+- Add more content depth (case studies)
