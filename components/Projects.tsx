@@ -8,32 +8,36 @@ gsap.registerPlugin(ScrollTrigger);
 
 const projects = [
   {
-    title: "Argo Ocean Chatbot",
-    category: "System Interface",
-    year: "2025",
+    title: "Aegis AI",
+    category: "AI x Web3 Infrastructure",
+    year: "2026",
     color: "#D1D5DB",
-    image: "https://images.unsplash.com/photo-1518837695005-2083093ee35b?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    image: "/bg1.png",
+    github: "https://aegis-ai-agent-app.vercel.app",
   },
   {
-    title: "UFDR Chatbot",
-    category: "Brand Experience",
+    title: "KeyBash",
+    category: "Typing Productivity Tool",
     year: "2025",
     color: "#9CA3AF",
-    image: "https://images.unsplash.com/photo-1713950658643-b6882cc08e2b?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    image: "/bg3.png",
+    github: "https://github.com/riyasisodiya2486/keyBash",
   },
   {
     title: "Productivity Enhancer",
-    category: "E-Commerce",
+    category: "AI Productivity System",
     year: "2025",
     color: "#6B7280",
-    image: "https://images.unsplash.com/photo-1614850523296-d8c1af93d400?auto=format&fit=crop&q=80&w=1200",
+    image: "/bg2.png",
+    github: "https://github.com/riyasisodiya2486/Adaptive-Productivity-Focus-Optimizer-",
   },
   {
     title: "Second Brain Vault",
-    category: "Experimental WebGL",
+    category: "Knowledge Management System",
     year: "2024",
     color: "#E5E7EB",
-    image: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&q=80&w=1200",
+    image: "/bg4.png",
+    github: "https://github.com/riyasisodiya2486/synapsey-second-brain-app",
   },
 ];
 
@@ -99,7 +103,12 @@ export default function Project() {
               key={index}
               className="project-slide w-[100vw] max-lg:w-full flex justify-center items-center shrink-0 px-20 max-lg:px-0 relative group"
             >
-              <div className="relative w-full max-w-5xl overflow-hidden aspect-video max-lg:aspect-square rounded-3xl bg-neutral-900 shadow-2xl mobile-reveal-card mobile-motion-element active:scale-[0.98] transition-transform duration-500 ease-out">
+              <a
+                href={project.github}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="relative w-full max-w-5xl overflow-hidden aspect-video max-lg:aspect-square rounded-3xl bg-neutral-900 shadow-2xl mobile-reveal-card mobile-motion-element active:scale-[0.98] transition-transform duration-500 ease-out cursor-pointer block"
+              >
                 {/* Image Component */}
                 <img
                   src={project.image}
@@ -125,7 +134,7 @@ export default function Project() {
 
                 {/* Aesthetic Detail Line */}
                 <div className="absolute bottom-0 left-0 h-1 w-full bg-white scale-x-0 group-hover:scale-x-100 transition-transform duration-700 origin-left" />
-              </div>
+              </a>
 
               {/* Massive Background Index Number */}
               <span className="absolute -bottom-10 max-lg:-bottom-4 -right-5 max-lg:-right-2 text-[25vw] max-lg:text-[35vw] font-black text-white/[0.03] select-none pointer-events-none z-0">
